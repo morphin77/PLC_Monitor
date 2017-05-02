@@ -13,4 +13,6 @@ TODO:
     add log files
   Config:
     Ciphered library
-    Store Data about DataBase connection
+    Store Data about DataBase connection	
+	Makefile:
+		write dirrective for installing and write installation process
