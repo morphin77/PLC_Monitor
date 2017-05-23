@@ -29,25 +29,42 @@ void connect_plc (char address[15], int rack, int slot)
     strcat(message, " доступен.\n");
     log_it(message);
     strcpy(message, "");
+
     fds.rfd = openSocket(102, address); 
     fds.wfd=fds.rfd;
     if (fds.rfd>0)
     {
-      printf("Сокет с целевым узлом %s открыт.\n", address);//вывод в лог
+      strcpy(message, "Сокет с целевым узлом ");
+      strcat(message, address);
+      strcat(message, " открыт.\n");
+      log_it(message);
+      strcpy(message, "");
       di = daveNewInterface(fds,"IF1",0, daveProtoISOTCP, daveSpeed187k);
       dc = daveNewConnection(di,0,rack, slot);
       if (0==daveConnectPLC(dc)) 
       {
-        printf("Успешно подключен к целевому узлу %s\n", address);  
+        strcpy(message, "Успешно подключен к целевому узлу ");
+        strcat(message, address);
+        strcat(message, "\n");
+        log_it(message);
+        strcpy(message, "");
       }
       else
       {
-        printf("Нет возможности подключиться с целевому узлу %s.\n", address);
+        strcpy(message, "Нет возможности подключиться с целевому узлу ");
+        strcat(message, address);
+        strcat(message, "\n");
+        log_it(message);
+        strcpy(message, "");
       } 
     } 
     else
     {
-      printf("Нет возможности открыть сокет для целевого узла %s.\n", address);//вывод в лог
+      strcpy(message, "Нет возможности открыть сокет для целевого узла ");
+      strcat(message, address);
+      strcat(message, "\n");
+      log_it(message);
+      strcpy(message, "");
     }
   }        
   else{

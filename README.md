@@ -5,12 +5,10 @@ Data saved in local MySQL Data Base
 
 tested for Linux Mint 18.1 "Serena" 32-bit
 TODO: 
-  MySQL:
-    get data from query in array
+ 
   PLC:
     Get Data from PLC
-  Log: 
-    add log files
+  
   Config:
     Ciphered library
     Store Data about DataBase connection	
