@@ -5,6 +5,7 @@
 #include <string.h>
 #include "nodave.h"
 #include "openSocket.h"
+#include "file.h"
 
 /*global vars*/
 daveInterface * di;
@@ -14,6 +15,7 @@ daveResultSet rs;
 
 void connect_plc (char address[15], int rack, int slot)
 {
+  char message[255];
   int x;
   char command[45];
   strcpy(command, "ping -c 1 -w 2 ");
@@ -21,7 +23,12 @@ void connect_plc (char address[15], int rack, int slot)
   strcat( command, ">/dev/null");
   x=system(command);
   if (x == 0){
-    printf("Целевой узел %s доступен.\n", address);
+    
+    strcpy(message, "Целевой узел ");
+    strcat(message, address);
+    strcat(message, " доступен.\n");
+    log_it(message);
+    strcpy(message, "");
     fds.rfd = openSocket(102, address); 
     fds.wfd=fds.rfd;
     if (fds.rfd>0)
@@ -44,6 +51,10 @@ void connect_plc (char address[15], int rack, int slot)
     }
   }        
   else{
-    printf("Целевой узел %s не доступен.\n", address);
+    strcpy(message, "Целевой узел ");
+    strcat(message, address);
+    strcat(message, " не доступен.\n");
+    log_it(message);
+    strcpy(message, "");
   }	
 }
