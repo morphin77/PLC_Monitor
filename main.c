@@ -4,8 +4,16 @@
 #include <string.h>
 #include <mysql/my_global.h>
 #include <mysql/mysql.h>
-#include "file.h"
 #include "plc.h"
+
+struct db_params{
+  char host[50];
+  char user[50];
+  char password[50];
+  char database[50];
+};  
+
+#include "file.h"
 
 void finish_with_error(MYSQL *con)
 {
@@ -14,8 +22,9 @@ void finish_with_error(MYSQL *con)
   exit(1);        
 }
 
+
+
 int main (void){
-	
   
   MYSQL *con = mysql_init(NULL);
   
@@ -27,9 +36,13 @@ int main (void){
   else
   { 	
   	log_it("MySQL клиент готов к подключению.\n");
-		
-  	if (mysql_real_connect(con, "localhost", "root", "sad56das", 
-          "testdb", 0, NULL, 0) == NULL) 
+    struct db_params param;
+	  read_config(param);
+    printf("%s\n", param.host);
+    printf("%s\n", param.user);
+    printf("%s\n", param.password);
+    printf("%s\n", param.database);
+  	if (mysql_real_connect(con, "localhost", "root", "sad56das", "testdb", 0, NULL, 0) == NULL) 
   	{
       finish_with_error(con);
   	}
