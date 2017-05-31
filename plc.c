@@ -13,7 +13,17 @@ daveConnection * dc;
 _daveOSserialType fds;
 daveResultSet rs;
 
-void connect_plc (char address[15], int rack, int slot)
+ /*
+  row[0] - IP
+  row[1] - Proto
+  row[2] - speed
+  row[3] - timeout
+  row[4] - MPI
+  row[5] - rack
+  row[6] - slot
+  */
+
+void connect_plc (char address[15], int proto, int speed, int timeout, int MPI, int rack, int slot)
 {
   char message[255];
   int x;
@@ -39,7 +49,7 @@ void connect_plc (char address[15], int rack, int slot)
       strcat(message, " открыт.\n");
       log_it(message);
       strcpy(message, "");
-      di = daveNewInterface(fds,"IF1",0, daveProtoISOTCP, daveSpeed187k);
+      di = daveNewInterface(fds,"IF1",MPI, proto, speed);
       dc = daveNewConnection(di,0,rack, slot);
       if (0==daveConnectPLC(dc)) 
       {

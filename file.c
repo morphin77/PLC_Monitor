@@ -1,6 +1,8 @@
+#include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
 #include <string.h>
+#include "file.h"
 
 void log_it(char *message){
 	FILE *log = fopen("log.txt", "a");
@@ -11,11 +13,27 @@ void log_it(char *message){
 	fclose(log);
 }
 
-void read_config(struct db_params params){
-	FILE *config = fopen("conf", "r");
-	char str[50];
-	char *estr;
+char* get_config_parametr(char str[255], char parametr[20], char varvalue[32]){
+	char * pos;
+  int delimiter = '=';
+  int posend;
+  
+	if (strncmp (str,parametr,4) == 0){
+  	pos = strchr(str, delimiter);
+   	if (pos) {  
+   		posend = abs (str - pos);
+     	strncpy(varvalue,str + posend + 1,strlen(str) - posend);
+     	varvalue[strlen(varvalue)-1]=0;
+  	}	
+  }	
+}
 
+struct db_params read_config(){
+	FILE *config = fopen("conf", "r+b");
+	char str[255];
+	char *estr;
+	struct db_params params;
+	
   if (config == NULL) {
   	log_it("Ошибка открытия файла конфигурации.\n");
   }
@@ -43,21 +61,15 @@ void read_config(struct db_params params){
         break;
       }
     }
+    else
+    {
+    	get_config_parametr(str,"host", params.host);
+    	get_config_parametr(str,"user", params.user);
+    	get_config_parametr(str,"password", params.password);
+    	get_config_parametr(str,"database", params.database);
+    }
     //Если файл не закончился, и не было ошибки чтения 
     //выводим считанную строку  на экран
-    
-    if (strncmp(str, "host=", 5)==0){
-    	strcpy(params.host, str);
-    }
-    if (strncmp(str, "user=", 5)==0){
-    	strcpy(params.user, str);
-    }
-    if (strncmp(str, "password=", 9)==0){
-    	strcpy(params.password, str);
-    }
-    if (strncmp(str, "database=", 9)==0){
-    	strcpy(params.database, str);
-    }
   }
 
   // Закрываем файл
@@ -69,4 +81,5 @@ void read_config(struct db_params params){
   {
   	log_it("Данные успешно прочитаны.\n");
   }
+  return params;
 }

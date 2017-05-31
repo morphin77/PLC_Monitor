@@ -1,4 +1,4 @@
 host=localhost
-user=root
-password=sad56das
-database=testdb
+user=plcm
+password=plcm
+database=plcm
